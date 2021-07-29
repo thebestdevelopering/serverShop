@@ -1,26 +1,56 @@
 const Product = require("../models/Products.model");
 
 module.exports.productController = {
-  addProduct: (req, res) => {
+  getRewiews: async (req, res) => {
+    try {
+      const products = await Product.find().populate("product");
+      res.json(products);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  getProductByCategory: async (req, res) => {
+    try {
+      const product = await Product.findById({ category: req.params.id });
+      res.json(product);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  getProductByBrand: async (req, res) => {
+    try {
+      const product = await Product.findById({ brand: req.params.id });
+      res.json(product);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  addProduct: async (req, res) => {
     try {
       await Product.create({
         name: req.body.name,
+        price: req.body.price,
+        brand: req.body.brand,
+        category: req.body.category,
       });
       res.send("Продукт добавлен");
     } catch (err) {
       console.log(err);
     }
   },
-  editProduct: (req, res) => {
+  editProduct: async (req, res) => {
     try {
-      await Product.findById(req.params.id);
+      await Product.findByIdAndUpdate(req.params.id);
       res.send("Продукт изменен");
     } catch (err) {
       console.log(err);
     }
   },
 
-  deleteProduct: (req, res) => {
+  deleteProduct: async (req, res) => {
     try {
       await Product.findByIdAndDelete(req.params.id);
       res.send("Продукт удален");
