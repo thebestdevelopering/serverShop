@@ -1,17 +1,7 @@
 const Reviews = require("../models/Reviews.model");
 
 module.exports.reviewsController = {
-   getReviews: (req, res) => {
-       try {
-           const review = await Reviews.find().populate('product')
-           res.json(review)
-       } catch (err) {
-           console.log(err)
-       }
-   },
-
-
-  addReviews: (req, res) => {
+  addReviews: async (req, res) => {
     try {
       await Reviews.create({
         name: req.body.name,
@@ -21,8 +11,16 @@ module.exports.reviewsController = {
       console.log(err);
     }
   },
+  editReviews: async (req, res) => {
+    try {
+      await Reviews.findById(req.params.id);
+      res.send("Отзыв изменен");
+    } catch (err) {
+      console.log(err);
+    }
+  },
 
-  deleteReviews: (req, res) => {
+  deleteReviews: async (req, res) => {
     try {
       await Reviews.findByIdAndDelete(req.params.id);
       res.send("Отзыв удален");
